@@ -26,6 +26,12 @@ Route.group(() => {
   // Cadastro de files
   Route.post('/files', 'FileController.store')
 
+  // Dashboard (Lista de Meetups)
+  Route.get('dashboard', 'MeetupController.index')
+
   // Cadastro de Meetup
-  Route.post('meetup', 'MeetupController.store')
+  Route.post('meetup', 'MeetupController.store').validator('Meetup')
+
+  // Detalhe do meetup
+  Route.get('meetup/:id', 'MeetupController.show')
 }).middleware(['auth'])

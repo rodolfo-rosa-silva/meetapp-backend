@@ -20,7 +20,7 @@ class User extends Model {
   }
 
   preferences () {
-    return this.belongsToMany('App/Models/Preferences').pivotModel(
+    return this.belongsToMany('App/Models/Preference').pivotModel(
       'App/Models/UserPreference'
     )
   }

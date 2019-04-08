@@ -12,12 +12,18 @@ class Meetup extends Model {
   }
 
   file () {
-    return this.hasOne('App/Models/File')
+    return this.belongsTo('App/Models/File')
   }
 
-  meetups () {
-    return this.belongsToMany('App/Models/Meetups').pivotModel(
+  subscriptions () {
+    return this.belongsToMany('App/Models/User').pivotModel(
       'App/Models/MeetupUser'
+    )
+  }
+
+  themes () {
+    return this.belongsToMany('App/Models/Preferences').pivotModel(
+      'App/Models/MeetupPreference'
     )
   }
 }

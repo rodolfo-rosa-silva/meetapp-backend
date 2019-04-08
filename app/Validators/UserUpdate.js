@@ -8,10 +8,7 @@ class UserUpdate {
   }
 
   get rules () {
-    const userId = this.ctx.params.id
-
     return {
-      username: `unique:users,username,id,${userId}`,
       password: 'confirmed'
     }
   }

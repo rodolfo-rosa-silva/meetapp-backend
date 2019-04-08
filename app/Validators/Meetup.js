@@ -2,13 +2,17 @@
 
 const Antl = use('Antl')
 
-class PreferencesSave {
+class Meetup {
   get validateAll () {
     return true
   }
 
   get rules () {
     return {
+      title: 'required',
+      description: 'required',
+      location: 'required',
+      datetime: 'required|date',
       preferences: 'required|array'
     }
   }
@@ -18,4 +22,4 @@ class PreferencesSave {
   }
 }
 
-module.exports = PreferencesSave
+module.exports = Meetup
