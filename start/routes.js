@@ -6,7 +6,7 @@ const Route = use('Route')
 Route.post('signup', 'UserController.store').validator('User')
 
 // Login
-Route.post('signin', 'SessionController.store')
+Route.post('signin', 'SessionController.store').validator('Signin')
 
 // Exibicao de files
 Route.get('/files/:file', 'FileController.show')
@@ -34,4 +34,9 @@ Route.group(() => {
 
   // Detalhe do meetup
   Route.get('meetup/:id', 'MeetupController.show')
+
+  // Inscricao no meetup
+  Route.post('meetup/subscription', 'MeetupController.subscription').validator(
+    'MeetupSubscription'
+  )
 }).middleware(['auth'])

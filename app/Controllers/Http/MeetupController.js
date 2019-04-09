@@ -2,6 +2,7 @@
 
 const UserPreference = use('App/Models/UserPreference')
 const Meetup = use('App/Models/Meetup')
+const MeetupUser = use('App/Models/MeetupUser')
 const MeetupPreference = use('App/Models/MeetupPreference')
 const moment = use('moment')
 
@@ -113,6 +114,27 @@ class MeetupController {
       .fetch()
 
     return meetup
+  }
+
+  async subscription ({ request, response, auth }) {
+    const user_id = auth.user.id
+    const { meetup_id } = request.only(['meetup_id'])
+    const checkSubscription = await MeetupUser.query()
+      .where('user_id', user_id)
+      .where('meetup_id', meetup_id)
+      .fetch()
+
+    if (checkSubscription.rows.length > 0) {
+      return response
+        .status(401)
+        .json({ message: 'Você já está inscrito neste meetup' })
+    }
+
+    await MeetupUser.create({ meetup_id: meetup_id, user_id: user_id })
+
+    return response
+      .status(201)
+      .json({ message: 'Inscrição realizada com sucesso' })
   }
 }
 
