@@ -1,10 +1,13 @@
 'use strict'
 
+const User = use('App/Models/User')
 const UserPreference = use('App/Models/UserPreference')
 const Meetup = use('App/Models/Meetup')
 const MeetupUser = use('App/Models/MeetupUser')
 const MeetupPreference = use('App/Models/MeetupPreference')
 const moment = use('moment')
+const Kue = use('Kue')
+const Job = use('App/Jobs/ConfirmMeetupMail')
 
 class MeetupController {
   async index ({ params, request, response, view, auth }) {
@@ -119,6 +122,10 @@ class MeetupController {
   async subscription ({ request, response, auth }) {
     const user_id = auth.user.id
     const { meetup_id } = request.only(['meetup_id'])
+
+    const user = await User.findByOrFail('id', user_id)
+    const meetup = await Meetup.findByOrFail('id', meetup_id)
+
     const checkSubscription = await MeetupUser.query()
       .where('user_id', user_id)
       .where('meetup_id', meetup_id)
@@ -131,6 +138,16 @@ class MeetupController {
     }
 
     await MeetupUser.create({ meetup_id: meetup_id, user_id: user_id })
+
+    const dateFormat = moment(meetup.datetime).format('DD/MM/YYYY')
+    const hourFormat = moment(meetup.datetime).format('HH:mm')
+    const redirectUrl = `${request.input('redirect_url')}`
+
+    Kue.dispatch(
+      Job.key,
+      { user, meetup, dateFormat, hourFormat, redirectUrl },
+      { attempts: 3 }
+    )
 
     return response
       .status(201)

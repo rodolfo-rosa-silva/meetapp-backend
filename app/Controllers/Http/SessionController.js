@@ -23,9 +23,15 @@ class SessionController {
 
     const token = await auth.attempt(email, password)
 
+    const redirectUrl = user.first_login > 0 ? '/dashboard' : '/preferences'
+
     return response
       .status(201)
-      .json({ message: 'Login realizado com sucesso', token: token })
+      .json({
+        message: 'Login realizado com sucesso',
+        token: token,
+        redirectUrl: redirectUrl
+      })
   }
 }
 
