@@ -30,6 +30,7 @@ class SessionController {
       .json({
         message: 'Login realizado com sucesso',
         token: token.token,
+        user_id: user.id,
         redirectUrl: redirectUrl
       })
   }
