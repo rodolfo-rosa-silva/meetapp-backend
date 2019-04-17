@@ -29,7 +29,7 @@ class SessionController {
       .status(201)
       .json({
         message: 'Login realizado com sucesso',
-        token: token,
+        token: token.token,
         redirectUrl: redirectUrl
       })
   }
