@@ -4,15 +4,21 @@ const User = use('App/Models/User')
 const UserPreference = use('App/Models/UserPreference')
 
 class UserController {
-  async store ({ request, response }) {
+  async store ({ request, response, auth }) {
     const data = request.only(['username', 'email', 'password'])
 
     try {
       const user = await User.create(data)
 
+      const token = await auth.attempt(data.email, data.password)
+
       return response
         .status(201)
-        .json({ message: 'Usuário salvo com sucesso', data: user })
+        .json({
+          message: 'Usuário salvo com sucesso',
+          user,
+          token: token.token
+        })
     } catch (err) {
       return response.status(err.status).send({ message: err.message })
     }
