@@ -25,14 +25,13 @@ class SessionController {
 
     const redirectUrl = user.first_login > 0 ? '/dashboard' : '/preferences'
 
-    return response
-      .status(201)
-      .json({
-        message: 'Login realizado com sucesso',
-        token: token.token,
-        user_id: user.id,
-        redirectUrl: redirectUrl
-      })
+    return response.status(201).json({
+      message: 'Login realizado com sucesso',
+      token: token.token,
+      user_id: user.id,
+      username: user.username,
+      redirectUrl: redirectUrl
+    })
   }
 }
 

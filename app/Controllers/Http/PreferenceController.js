@@ -5,7 +5,7 @@ const Preferences = use('App/Models/Preference')
 const UserPreference = use('App/Models/UserPreference')
 
 class PreferenceController {
-  async index ({ request, response, view }) {
+  async index ({ request, response }) {
     const preferences = await Preferences.all()
 
     return preferences
@@ -31,12 +31,6 @@ class PreferenceController {
       .status(201)
       .json({ message: 'Preferências salvas com sucesso' })
   }
-
-  async show ({ params, request, response, view }) {}
-
-  async update ({ params, request, response }) {}
-
-  async destroy ({ params, request, response }) {}
 }
 
 module.exports = PreferenceController
