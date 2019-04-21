@@ -10,7 +10,7 @@ const Kue = use('Kue')
 const Job = use('App/Jobs/ConfirmMeetupMail')
 
 class MeetupController {
-  async index ({ params, request, response, view, auth }) {
+  async index ({ request, response, auth }) {
     const user_id = auth.user.id
     const now = moment().format('YYYY-MM-DD HH:mm:ss')
     const { s } = request.get() // parametro para filtro pelo titulo do meetup
@@ -20,11 +20,10 @@ class MeetupController {
     const nextMeetups = await Meetup.query()
       .select('meetups.*')
       .with('file')
-      .leftJoin('meetup_users', 'meetup_users.meetup_id', 'meetups.id')
       .where('datetime', '>', now)
-      .whereRaw('(meetup_users.user_id IS NULL OR meetup_users.user_id <> ?)', [
-        user_id
-      ])
+      .whereDoesntHave('subscriptions', builder => {
+        builder.where('user_id', user_id)
+      })
       .whereRaw(whereLikeTitle)
       .orderBy('datetime', 'DESC')
       .withCount('subscriptions')
@@ -64,6 +63,9 @@ class MeetupController {
       .whereRaw('(meetup_users.user_id IS NULL OR meetup_users.user_id <> ?)', [
         user_id
       ])
+      .whereDoesntHave('subscriptions', builder => {
+        builder.where('user_id', user_id)
+      })
       .whereIn('meetup_preferences.preference_id', user_preferences)
       .whereRaw(whereLikeTitle)
       .groupBy('meetups.id')
@@ -109,14 +111,20 @@ class MeetupController {
     }
   }
 
-  async show ({ params, request, response, view }) {
+  async show ({ params, request, response, auth }) {
     const meetup = await Meetup.query()
       .where('id', params.id)
       .with('file')
       .withCount('subscriptions')
       .fetch()
 
-    return meetup
+    const checkSubscription = await MeetupUser.query()
+      .where('meetup_id', params.id)
+      .where('user_id', auth.user.id)
+      .fetch()
+    const subscrition = checkSubscription.rows.length > 0
+
+    return response.status(201).json({ meetup: meetup.rows[0], subscrition })
   }
 
   async subscription ({ request, response, auth }) {
