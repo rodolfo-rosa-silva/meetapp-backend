@@ -20,6 +20,10 @@ Route.group(() => {
   Route.post('preferences/save', 'PreferenceController.store').validator(
     'PreferencesSave'
   )
+
+  // Lista os dados do usuario para a edicao
+  Route.get('profile', 'UserController.show')
+
   // Edita os dados do usuario
   Route.put('profile', 'UserController.update').validator('UserUpdate')
 
@@ -39,4 +43,10 @@ Route.group(() => {
   Route.post('meetup/subscription', 'MeetupController.subscription').validator(
     'MeetupSubscription'
   )
+
+  // Confirmacao no meetup
+  Route.post(
+    '/meetup/confirmation',
+    'MeetupController.subscriptionConfirmation'
+  ).validator('MeetupConfirmation')
 }).middleware(['auth'])

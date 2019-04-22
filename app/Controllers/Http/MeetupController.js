@@ -122,9 +122,9 @@ class MeetupController {
       .where('meetup_id', params.id)
       .where('user_id', auth.user.id)
       .fetch()
-    const subscrition = checkSubscription.rows.length > 0
+    const subscription = checkSubscription.rows.length > 0
 
-    return response.status(201).json({ meetup: meetup.rows[0], subscrition })
+    return response.status(201).json({ meetup: meetup.rows[0], subscription })
   }
 
   async subscription ({ request, response, auth }) {
@@ -160,6 +160,26 @@ class MeetupController {
     return response
       .status(201)
       .json({ message: 'Inscrição realizada com sucesso' })
+  }
+
+  async subscriptionConfirmation ({ request, response, auth }) {
+    const data = request.only(['meetup_id'])
+
+    const meetup = await Meetup.query()
+      .where('id', data.meetup_id)
+      .with('file')
+      .withCount('subscriptions')
+      .fetch()
+
+    await MeetupUser.query()
+      .where('meetup_id', data.meetup_id)
+      .where('user_id', auth.user.id)
+      .update({ confirmation: 1 })
+
+    return response.json({
+      meetup: meetup.rows[0],
+      message: 'Confirmação realizada com sucesso'
+    })
   }
 }
 

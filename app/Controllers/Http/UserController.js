@@ -2,6 +2,7 @@
 
 const User = use('App/Models/User')
 const UserPreference = use('App/Models/UserPreference')
+const Preferences = use('App/Models/Preference')
 
 class UserController {
   async store ({ request, response, auth }) {
@@ -12,13 +13,11 @@ class UserController {
 
       const token = await auth.attempt(data.email, data.password)
 
-      return response
-        .status(201)
-        .json({
-          message: 'Usuário salvo com sucesso',
-          user,
-          token: token.token
-        })
+      return response.status(201).json({
+        message: 'Usuário salvo com sucesso',
+        user,
+        token: token.token
+      })
     } catch (err) {
       return response.status(err.status).send({ message: err.message })
     }
@@ -56,6 +55,29 @@ class UserController {
     } catch (err) {
       return response.status(err.status).send({ message: err.message })
     }
+  }
+
+  async show ({ request, response, auth }) {
+    const userId = auth.user.id
+    const user = await User.query()
+      .where('id', userId)
+      .fetch()
+
+    const findUserPreferences = await UserPreference.query()
+      .where('user_id', userId)
+      .fetch()
+
+    const IdsUserPreferences = findUserPreferences.rows.map(
+      item => item.preference_id
+    )
+
+    const preferences = await Preferences.all()
+
+    return response.json({
+      user: user.rows[0],
+      userPreferences: IdsUserPreferences,
+      preferences
+    })
   }
 }
 
