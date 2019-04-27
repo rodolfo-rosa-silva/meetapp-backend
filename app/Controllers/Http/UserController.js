@@ -27,7 +27,8 @@ class UserController {
     try {
       const user_id = auth.user.id
       const { username, password, preferences } = request.all()
-      const data_user = { username: username, password: password }
+      const data_user = { username: username }
+      if (password) data_user.password = password
 
       const user = await User.findByOrFail('id', user_id)
 
