@@ -51,11 +51,17 @@ Exceto as rotas `/signup` e `/signin` não precisam de autenticação, todas as 
 **Cadastro**
 
 **Rota:** - `/signup`
+
 **Método:** - POST
+
 **Formato:** - JSON
+
 **Dados:**
+
 username: `string`
+
 email: `string`
+
 password: `string`
 
 ---
@@ -63,10 +69,15 @@ password: `string`
 **Login**
 
 **Rota:** - `/signin`
+
 **Método:** - POST
+
 **Formato:** - JSON
+
 **Dados:**
+
 email: `string`
+
 password: `string`
 
 ---
@@ -74,8 +85,11 @@ password: `string`
 **Edição do usuário (listagem dos dados)**
 
 **Rota:** - `/profile`
+
 **Método:** - GET
+
 **Formato:** - JSON
+
 **Dados:** - No Body
 
 ---
@@ -83,12 +97,19 @@ password: `string`
 **Edição do usuário (salvar os dados)**
 
 **Rota:** - `/profile`
+
 **Método:** - PUT
+
 **Formato:** - JSON
+
 **Dados:**
+
 username: `string`
+
 password: `string`
+
 password_confirmation: `string`
+
 preferences: `array`
 
 ---
@@ -96,8 +117,11 @@ preferences: `array`
 **Preferências (listagem)**
 
 **Rota:** - `/preferences`
+
 **Método:** - GET
+
 **Formato:** - JSON
+
 **Dados:** - No Body
 
 ---
@@ -105,9 +129,13 @@ preferences: `array`
 **Preferências (cadastro)**
 
 **Rota:** - `/preferences/save`
+
 **Método:** - POST
+
 **Formato:** - JSON
+
 **Dados:**
+
 preferences: `array`
 
 ---
@@ -115,11 +143,17 @@ preferences: `array`
 **File (cadastro)**
 
 **Rota:** - `/files`
+
 **Método:** - POST
+
 **Formato:** - Multipart
+
 **Campo** - `file`
+
 **Header** - `Content-Type` `multipart/form-data`
+
 **Dados:**
+
 preferences: `array`
 
 ---
@@ -127,7 +161,9 @@ preferences: `array`
 **File (listagem)**
 
 **Rota:** - `/files/:file`(este parâmetro `file` é o valor do campo `file` da tabela)
+
 **Método:** - GET
+
 **Dados:** - No Body
 
 ---
@@ -135,7 +171,9 @@ preferences: `array`
 **File (deleção)**
 
 **Rota:** - `/files/:id`
+
 **Método:** - DELETE
+
 **Dados:** - No Body
 
 ---
@@ -143,7 +181,9 @@ preferences: `array`
 **Meetups (listagem)**
 
 **Rota:** - `/dashboard`
+
 **Método:** - GET
+
 **Dados:** - No Body
 
 ---
@@ -151,7 +191,9 @@ preferences: `array`
 **Meetups (listagem individual)**
 
 **Rota:** - `/meetup/:id`
+
 **Método:** - GET
+
 **Dados:** - No Body
 
 ---
@@ -159,14 +201,23 @@ preferences: `array`
 **Meetups (cadastro)**
 
 **Rota:** - `/meetup`
+
 **Método:** - POST
+
 **Formato:** - JSON
+
 **Dados:**
+
 title: `string`
+
 description: `string`
+
 location: `string`
+
 datetime: `string` (YYYY-MM-DD H:I:S)
+
 file_id: `number`
+
 preferences: `array`
 
 ---
@@ -174,10 +225,15 @@ preferences: `array`
 **Meetups (inscrição)**
 
 **Rota:** - `/meetup/subscription`
+
 **Método:** - POST
+
 **Formato:** - JSON
+
 **Dados:**
+
 meetup_id: `number`
+
 redirect_url: `string`
 
 ---
@@ -185,7 +241,11 @@ redirect_url: `string`
 **Meetups (confirmar inscrição)**
 
 **Rota:** - `/meetup/confirmation`
+
 **Método:** - POST
+
 **Formato:** - JSON
+
 **Dados:**
+
 meetup_id: `number`
