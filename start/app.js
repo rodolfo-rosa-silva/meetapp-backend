@@ -21,7 +21,8 @@ const providers = [
   '@adonisjs/mail/providers/MailProvider',
   '@adonisjs/framework/providers/ViewProvider',
   '@adonisjs/redis/providers/RedisProvider',
-  'adonis-kue/providers/KueProvider'
+  'adonis-kue/providers/KueProvider',
+  '@adonisjs/drive/providers/DriveProvider'
 ]
 
 /*

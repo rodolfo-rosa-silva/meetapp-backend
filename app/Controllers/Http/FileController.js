@@ -2,6 +2,7 @@
 
 const File = use('App/Models/File')
 const Helpers = use('Helpers')
+const Drive = use('Drive')
 
 class FileController {
   async show ({ params, response }) {
@@ -35,7 +36,23 @@ class FileController {
 
       return file
     } catch (err) {
-      return response.status(err.status).send({ message: 'Erro no upload' })
+      return response.status(err.status).send({ message: err.message })
+    }
+  }
+
+  async destroy ({ params, request, response }) {
+    try {
+      const file = await File.findOrFail(params.id)
+      await Drive.delete(file.file)
+      await file.delete()
+
+      return response
+        .status(201)
+        .send({ message: 'Arquivo removido com sucesso ' })
+    } catch (err) {
+      return response
+        .status(err.status)
+        .send({ message: 'Erro ao deletar o arquivo' })
     }
   }
 }

@@ -30,6 +30,9 @@ Route.group(() => {
   // Cadastro de files
   Route.post('/files', 'FileController.store')
 
+  // Delecao de files
+  Route.delete('/files/:id', 'FileController.destroy')
+
   // Dashboard (Lista de Meetups)
   Route.get('dashboard', 'MeetupController.index')
 

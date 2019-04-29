@@ -13,7 +13,8 @@ class Meetup {
       description: 'required',
       location: 'required',
       datetime: 'required|date',
-      preferences: 'required|array'
+      preferences: 'required|array',
+      file_id: 'required|number'
     }
   }
 

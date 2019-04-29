@@ -25,7 +25,7 @@ class MeetupController {
         builder.where('user_id', user_id)
       })
       .whereRaw(whereLikeTitle)
-      .orderBy('datetime', 'DESC')
+      .orderBy('datetime', 'ASC')
       .withCount('subscriptions')
       .fetch()
     // meetups os quais está inscrito e acontecerão em breve
@@ -36,7 +36,7 @@ class MeetupController {
       .where('datetime', '>', now)
       .where('meetup_users.user_id', user_id)
       .whereRaw(whereLikeTitle)
-      .orderBy('datetime', 'DESC')
+      .orderBy('datetime', 'ASC')
       .withCount('subscriptions')
       .fetch()
 
@@ -69,7 +69,7 @@ class MeetupController {
       .whereIn('meetup_preferences.preference_id', user_preferences)
       .whereRaw(whereLikeTitle)
       .groupBy('meetups.id')
-      .orderBy('datetime', 'DESC')
+      .orderBy('datetime', 'ASC')
       .withCount('subscriptions')
       .fetch()
 
@@ -89,6 +89,13 @@ class MeetupController {
         'datetime',
         'file_id'
       ])
+
+      if (data.file_id === 0) {
+        return response
+          .status(401)
+          .json({ message: 'Selecione uma imagem de capa para o meetup' })
+      }
+
       const meetup = await Meetup.create(data)
 
       const dataPreferences = request.only(['preferences'])

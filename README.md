@@ -1,28 +1,191 @@
-# Adonis API application
+**MeetApp - GoStack5 Rocketseat**
 
-This is the boilerplate for creating an API server in AdonisJs, it comes pre-configured with.
+**Sobre o repositório**
+Este repositório se refere ao código do backend da aplicação, feita em REST API, ela fica responsável por todas as requisições e operações feita no banco de dados.
 
-1. Bodyparser
-2. Authentication
-3. CORS
-4. Lucid ORM
-5. Migrations and seeds
+**Tecnologias utilizadas**
 
-## Setup
+- Adonis JS
+- MySQL
+- Redis
+- Mailtrap para envio de e-mails no ambiente de dev
 
-Use the adonis command to install the blueprint
+**Ambientação**
+Caso não possua o Adonis instalado em sua máquina, utilize:
 
-```bash
-adonis new yardstick --api-only
-```
+    npm i -g @adonisjs/cli
 
-or manually clone the repo and then run `npm install`.
+Em seguida, clone o projeto
 
+    git clone git@github.com:rodolfo-rosa-silva/meetapp-backend.git
 
-### Migrations
+Dentro da pasta do projeto, instale as dependências
 
-Run the following command to run startup migrations.
+    cd meetapp-backend
+    yarn
 
-```js
-adonis migration:run
-```
+Crie um arquivo na raíz do projeto, com o nome `.env` utilizando as informações do `.env.example` como base.
+
+Agora é preciso rodar as migrations para criar as tabelas no banco de dados. Certifique-se que o seu MySQL está rodando e possua um banco criado com o nome `meetapp`
+
+    adonis migration:run
+
+Com o MySQL e o Redis rodando em sua máquina, será preciso ter dois terminais rodando simultaneamente, com os seguintes comandos:
+
+Terminal 1 (sobe o servidor do Adonis)
+
+    adonis serve --dev
+
+Terminal 2 (coloca o kue para escutar as tarefas e processar no Redis)
+
+    adonis kue:listen
+
+Pronto! Agora você já pode acessar as endpoints da API através do seu http://localhost:3333
+
+## **Endpoints**
+
+Exceto as rotas `/signup` e `/signin` não precisam de autenticação, todas as outras necessitam de um `Bearer Token` na requisição.
+
+**Usuário**
+
+**Cadastro**
+
+**Rota:** - `/signup`
+**Método:** - POST
+**Formato:** - JSON
+**Dados:**
+username: `string`
+email: `string`
+password: `string`
+
+---
+
+**Login**
+
+**Rota:** - `/signin`
+**Método:** - POST
+**Formato:** - JSON
+**Dados:**
+email: `string`
+password: `string`
+
+---
+
+**Edição do usuário (listagem dos dados)**
+
+**Rota:** - `/profile`
+**Método:** - GET
+**Formato:** - JSON
+**Dados:** - No Body
+
+---
+
+**Edição do usuário (salvar os dados)**
+
+**Rota:** - `/profile`
+**Método:** - PUT
+**Formato:** - JSON
+**Dados:**
+username: `string`
+password: `string`
+password_confirmation: `string`
+preferences: `array`
+
+---
+
+**Preferências (listagem)**
+
+**Rota:** - `/preferences`
+**Método:** - GET
+**Formato:** - JSON
+**Dados:** - No Body
+
+---
+
+**Preferências (cadastro)**
+
+**Rota:** - `/preferences/save`
+**Método:** - POST
+**Formato:** - JSON
+**Dados:**
+preferences: `array`
+
+---
+
+**File (cadastro)**
+
+**Rota:** - `/files`
+**Método:** - POST
+**Formato:** - Multipart
+**Campo** - `file`
+**Header** - `Content-Type` `multipart/form-data`
+**Dados:**
+preferences: `array`
+
+---
+
+**File (listagem)**
+
+**Rota:** - `/files/:file`(este parâmetro `file` é o valor do campo `file` da tabela)
+**Método:** - GET
+**Dados:** - No Body
+
+---
+
+**File (deleção)**
+
+**Rota:** - `/files/:id`
+**Método:** - DELETE
+**Dados:** - No Body
+
+---
+
+**Meetups (listagem)**
+
+**Rota:** - `/dashboard`
+**Método:** - GET
+**Dados:** - No Body
+
+---
+
+**Meetups (listagem individual)**
+
+**Rota:** - `/meetup/:id`
+**Método:** - GET
+**Dados:** - No Body
+
+---
+
+**Meetups (cadastro)**
+
+**Rota:** - `/meetup`
+**Método:** - POST
+**Formato:** - JSON
+**Dados:**
+title: `string`
+description: `string`
+location: `string`
+datetime: `string` (YYYY-MM-DD H:I:S)
+file_id: `number`
+preferences: `array`
+
+---
+
+**Meetups (inscrição)**
+
+**Rota:** - `/meetup/subscription`
+**Método:** - POST
+**Formato:** - JSON
+**Dados:**
+meetup_id: `number`
+redirect_url: `string`
+
+---
+
+**Meetups (confirmar inscrição)**
+
+**Rota:** - `/meetup/confirmation`
+**Método:** - POST
+**Formato:** - JSON
+**Dados:**
+meetup_id: `number`
